@@ -42,7 +42,9 @@ public class ValidatorUtil {
      * @param msg 信息
      */
     public static void showError(String msg,String title){
-        JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE);
+        JDialog dialog = new JDialog();
+        dialog.setAlwaysOnTop(true);
+        JOptionPane.showMessageDialog(dialog, msg, title, JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -51,7 +53,9 @@ public class ValidatorUtil {
      * @param msg 信息
      */
     public static void showWarning(String msg,String title){
-        JOptionPane.showMessageDialog(null, msg, title, JOptionPane.WARNING_MESSAGE);
+        JDialog dialog = new JDialog();
+        dialog.setAlwaysOnTop(true);
+        JOptionPane.showMessageDialog(dialog, msg, title, JOptionPane.WARNING_MESSAGE);
     }
 
     /**
@@ -60,6 +64,10 @@ public class ValidatorUtil {
      * @param msg 信息
      */
     public static void showInfo(String msg,String title){
-        JOptionPane.showMessageDialog(null, msg, title, JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialog = new JDialog();
+        dialog.setAlwaysOnTop(true);
+        JOptionPane.showMessageDialog(dialog, msg, title, JOptionPane.INFORMATION_MESSAGE);
+
+
     }
 }
