@@ -11,17 +11,19 @@ public class ValidatorUtil {
 
     /**
      * 判断是否为空
-     * @param type 显示的内容类型字符串,如用户名
+     * @param type 显示的内容类型字符串,如用户名.多个需用逗号分开
      * @param components 需要判断的组件
      * @return 返回布尔值
      */
     public static boolean validation(String type,JTextComponent...components){
+        int i=0;
         for(JTextComponent component:components) {
             if (isEmpty(component)) {
-                showWarning(type + "不能为空！", "数据库连接");
+                showWarning(type.split(",")[i] + "不能为空！", "数据库连接");
                 component.requestFocus();
                 return false;
             }
+            i++;
         }
         return true;
     }

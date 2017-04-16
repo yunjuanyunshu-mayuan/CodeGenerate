@@ -40,9 +40,9 @@ import lombok.Setter;
 /**
  *
  * @author $USER
- * @version $Id: ${ClassName}.java, v 0.1 $TIME $USER Exp $$
+ * @version $Id: ${TableEntity.tableJavaName}.java, v 0.1 $TIME $USER Exp $$
  */
-class $ClassName {
+class $TableEntity.tableJavaName {
 
 #foreach($field in $class0.Fields)
     /**

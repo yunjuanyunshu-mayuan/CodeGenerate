@@ -63,12 +63,14 @@ public class DBConn extends JFrame implements ConvertBridge.Operator {
                 String tmpDBUser = textUserName.getText();
                 String tmpDBPasswrd = textPassword.getText();
                 DatabaseConnection dbc=new DatabaseConnection(tmpDBUser,tmpDBPasswrd,tmpDBUrl);
-                if(ValidatorUtil.validation("username",textIpAddress,textUserName)?dbc.testDBConn():false){
+                if(ValidatorUtil.validation("IpAdrress,Username",textIpAddress,textUserName)){
+                if(dbc.testDBConn()){
                     dbConn.setVisible(false);
                     GridMain gridMain = new GridMain(project,dbConn,tmpSchema,tmpDBUser,tmpDBPasswrd,tmpDBUrl);
                 }else {
                     ValidatorUtil.showWarning("数据库连接失败", "数据库连接");
                    // JOptionPane.showMessageDialog(null, "数据库连接失败", "数据库连接", JOptionPane.WARNING_MESSAGE);
+                }
                 }
 
             }
