@@ -17,6 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import com.yunjuanyunshu.util.ValidatorUtil;
 
 public class DBConn extends JFrame implements ConvertBridge.Operator {
     private JButton cancelButton;
@@ -62,11 +63,12 @@ public class DBConn extends JFrame implements ConvertBridge.Operator {
                 String tmpDBUser = textUserName.getText();
                 String tmpDBPasswrd = textPassword.getText();
                 DatabaseConnection dbc=new DatabaseConnection(tmpDBUser,tmpDBPasswrd,tmpDBUrl);
-                if(dbc.testDBConn()){
+                if(ValidatorUtil.validation("username",textIpAddress,textUserName)&&dbc.testDBConn()){
                     dbConn.setVisible(false);
                     GridMain gridMain = new GridMain(project,dbConn,tmpSchema,tmpDBUser,tmpDBPasswrd,tmpDBUrl);
                 }else {
-                    JOptionPane.showMessageDialog(null, "数据库连接失败", "数据库连接", JOptionPane.WARNING_MESSAGE);
+                    ValidatorUtil.showWarning("数据库连接失败", "数据库连接");
+                   // JOptionPane.showMessageDialog(null, "数据库连接失败", "数据库连接", JOptionPane.WARNING_MESSAGE);
                 }
 
             }

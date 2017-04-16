@@ -69,7 +69,7 @@ public class PackageSelect extends JFrame implements TreeSelectionListener {
         //this.add(jPanel);
         this.setTitle("选择包");
         this.pack();
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setAlwaysOnTop(true);
         jScrollPane.setPreferredSize(new Dimension(300,600));
         jScrollPane.revalidate();
