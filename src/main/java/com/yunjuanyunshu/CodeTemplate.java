@@ -26,21 +26,21 @@ public class CodeTemplate {
     /**
      * the number of template context class
      */
-    private int    classNumber;
+    private String packageName;
 
     public CodeTemplate() {
     }
 
-    public CodeTemplate(String name, String classNameVm, String codeTemplate, int classNumber) {
+    public CodeTemplate(String name, String classNameVm, String codeTemplate, String packageName) {
         this.name = name;
         this.classNameVm = classNameVm;
         this.codeTemplate = codeTemplate;
-        this.classNumber = classNumber;
+        this.packageName = packageName;
     }
 
     public boolean isValid() {
         return StringUtil.isNotEmpty(getClassNameVm()) && StringUtil.isNotEmpty(getName())
-               && StringUtil.isNotEmpty(getCodeTemplate()) && classNumber != -1;
+               && StringUtil.isNotEmpty(getCodeTemplate()) && StringUtil.isNotEmpty(packageName);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CodeTemplate {
 
         CodeTemplate that = (CodeTemplate) o;
 
-        if (classNumber != that.classNumber)
+        if (packageName != null && packageName.equals(that.packageName))
             return false;
         if (name != null ? !name.equals(that.name) : that.name != null)
             return false;
@@ -67,11 +67,11 @@ public class CodeTemplate {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (classNameVm != null ? classNameVm.hashCode() : 0);
         result = 31 * result + (codeTemplate != null ? codeTemplate.hashCode() : 0);
-        result = 31 * result + classNumber;
+        result = 31 * result + (packageName != null ? packageName.hashCode() : 0);
         return result;
     }
 
-    public static final CodeTemplate EMPTY_TEMPLATE = new CodeTemplate("", "", "", 1);
+    public static final CodeTemplate EMPTY_TEMPLATE = new CodeTemplate("", "", "", "");
 
     /**
      * Getter method for property <tt>name</tt>.
@@ -114,17 +114,17 @@ public class CodeTemplate {
      *
      * @return property value of classNumber
      */
-    public int getClassNumber() {
-        return classNumber;
+    public String getPackageName() {
+        return packageName;
     }
 
     /**
      * Setter method for property <tt>classNumber</tt>.
      *
-     * @param classNumber value to be assigned to property classNumber
+     * @param packageName value to be assigned to property classNumber
      */
-    public void setClassNumber(int classNumber) {
-        this.classNumber = classNumber;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     /**

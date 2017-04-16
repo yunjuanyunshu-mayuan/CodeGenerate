@@ -49,7 +49,11 @@ public class CodeMakerUtil {
     }
 
     public static String generateClassPath(Project project,String packagePath, String className) {
-        return project.getBasePath() + "/src/" + packagePath.replace(".","/") +"/" + className +".java";
+        return project.getBasePath() + "/src/" + packagePath.replace(".","/") +"/" + className;
+    }
+
+    public static String generateClassRootPath(Project project) {
+        return project.getBasePath() + "/src";
     }
 
     /**

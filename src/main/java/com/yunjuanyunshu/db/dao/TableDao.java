@@ -7,6 +7,7 @@
 
 package com.yunjuanyunshu.db.dao;
 
+import com.yunjuanyunshu.Entity.ColumnEntity;
 import com.yunjuanyunshu.Entity.TableEntity;
 import com.yunjuanyunshu.db.dbc.DatabaseConnection;
 import com.yunjuanyunshu.util.HumpLineUtil;
@@ -96,8 +97,8 @@ public class TableDao implements IDao<TableEntity>{
                 tmp.setTableJavaName(HumpLineUtil.getJavaTableName(tmp.getTableDBName()));
                 tmp.setTableJavaDesc(tmp.getTableDBDesc());
 
-                ColumnDao columnDao =new ColumnDao(dBUSER,dBPASSWORD,dBURL);
-                tmp.setColumnEntityList(columnDao.findAllColumnInfo(schema,tmp.getTableDBName()));
+//                ColumnDao columnDao =new ColumnDao(dBUSER,dBPASSWORD,dBURL);
+//                tmp.setColumnEntityList(columnDao.findAllColumnInfo(schema,tmp.getTableDBName()));
                 all.add(tmp);
             }
         }catch(Exception e){
@@ -122,12 +123,19 @@ public class TableDao implements IDao<TableEntity>{
      */
     public HashMap<String,TableEntity> findHashMapAllTableInfo(String schema) throws Exception {
         List<TableEntity> tmplist = findAllTableInfo(schema);
+        ColumnDao columnDao =new ColumnDao(dBUSER,dBPASSWORD,dBURL);
+        HashMap<String,List<ColumnEntity>> tmpColumnAllInfo = columnDao.findAllColumnInfo(schema);
         HashMap<String,TableEntity> tmpMap = new HashMap<>();
         for(TableEntity tmp : tmplist){
+            if(tmpColumnAllInfo.containsKey(tmp.getTableDBName())){
+                tmp.setColumnEntityList(tmpColumnAllInfo.get(tmp.getTableDBName()));
+            }
             tmpMap.put(tmp.getTableDBName(),tmp);
         }
         return  tmpMap;
     }
+
+
     /**
      * 获取数据库中表和视图名称
      * @param schema 数据库名称

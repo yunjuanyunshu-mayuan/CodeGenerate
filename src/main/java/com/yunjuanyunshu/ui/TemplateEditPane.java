@@ -8,7 +8,6 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.yunjuanyunshu.CodeMakerSettings;
 import com.yunjuanyunshu.CodeTemplate;
-import com.yunjuanyunshu.util.CodeMakerUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +20,7 @@ public class TemplateEditPane {
 
     private JPanel     templateEdit;
     private JTextField templateNameText;
-    private JTextField classNumberText;
+    private JTextField packageNameText;
     private JTextField classNameText;
     private JButton    deleteTemplateButton;
     private JPanel     editorPane;
@@ -35,7 +34,7 @@ public class TemplateEditPane {
         }
 
         templateNameText.setText(codeTemplate.getName());
-        classNumberText.setText(String.valueOf(codeTemplate.getClassNumber()));
+        packageNameText.setText(codeTemplate.getPackageName());
         classNameText.setText(codeTemplate.getClassNameVm());
         addVmEditor(codeTemplate.getCodeTemplate());
         deleteTemplateButton.addActionListener(e -> {
@@ -80,13 +79,10 @@ public class TemplateEditPane {
     }
 
     /**
-     *
-     * @return -1 if classNumberText is not number
+     * 获取包前缀名
+     * @return 包前缀名
      */
-    public int getClassNumber() {
-        if (CodeMakerUtil.isNumeric(classNumberText.getText())) {
-            return Integer.parseInt(classNumberText.getText());
-        }
-        return -1;
+    public String getPackageName() {
+            return packageNameText.getText();
     }
 }

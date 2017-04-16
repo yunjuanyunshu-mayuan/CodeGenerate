@@ -60,7 +60,7 @@ public class CreateFileAction implements Runnable {
             } else {
                 File file = new File(outputFile);
                 if (!file.getParentFile().exists()) {
-                    file.getParentFile().mkdir();
+                    file.getParentFile().mkdirs();
                 }
                 FileWriter fileWriter = null;
                 try {

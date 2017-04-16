@@ -112,7 +112,7 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
             " * @author $USER\n" +
             " * @version ${TableEntity.tableJavaName}.java, v 0.1 $TIME $USER Exp $$\n" +
             " */\n" +
-            "class $TableEntity.tableJavaName {\n" +
+            "class ${TableEntity.tableJavaName} {\n" +
             "\n" +
             "#foreach($field in $TableEntity.ColumnEntityList)\n" +
             "    /**\n" +
@@ -150,10 +150,10 @@ public class CodeMakerSettings implements PersistentStateComponent<CodeMakerSett
     public void loadDefaultSettings() {
         Map<String, CodeTemplate> codeTemplates = new HashMap<>();
         codeTemplates.put("Converter", new CodeTemplate("Converter",
-            "${class0.className}Converter", CONVERTER, 2));
+            "${TableEntity.tableJavaName}Converter.java", CONVERTER, "Converter"));
         codeTemplates.put("Model", new CodeTemplate("Model",
-            "#set($end = ${class0.className.length()} - 2)${class0.className.substring(0,${end})}",
-            MODEL, 1));
+            "${TableEntity.tableJavaName}Model.java",
+            MODEL, "Model"));
         this.codeTemplates = codeTemplates;
     }
 

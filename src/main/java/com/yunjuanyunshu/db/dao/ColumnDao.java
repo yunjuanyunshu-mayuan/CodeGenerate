@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ColumnDao implements IDao<BaseEntity> {
@@ -114,5 +115,53 @@ public class ColumnDao implements IDao<BaseEntity> {
         return all;
     }
 
+
+    public HashMap<String,List<ColumnEntity>> findAllColumnInfo(String schema) throws Exception {
+        String sql="select * from information_schema.COLUMNS where table_schema = ? ;";
+        HashMap<String,List<ColumnEntity>> all= new HashMap<String,List<ColumnEntity>>();
+        PreparedStatement pstmt=null;
+        try{
+            List<ColumnEntity> tmpAll;
+            pstmt=this.conn.prepareStatement(sql);
+            pstmt.setString(1,schema);
+            System.out.println(sql);
+            ResultSet rs=pstmt.executeQuery();
+            ColumnEntity tmp=null;
+            while(rs.next()){
+                String tmpTableName = "";
+                tmpTableName = rs.getString("TABLE_NAME");
+                tmp=new ColumnEntity();
+                tmp.setColDBName(rs.getString("COLUMN_NAME"));
+                tmp.setColDBType(rs.getString("DATA_TYPE"));
+                tmp.setColDBNullAble(rs.getString("IS_NULLABLE").equals("YES"));
+                tmp.setColDBDesc(rs.getString("COLUMN_COMMENT") == null ? "" : rs.getString("COLUMN_COMMENT"));
+                tmp.setColDBLength(rs.getString("CHARACTER_MAXIMUM_LENGTH") == null ? 0 : rs.getLong("CHARACTER_MAXIMUM_LENGTH"));
+                tmp.setColJavaName(HumpLineUtil.getJavaColumnName(tmp.getColDBName()));
+                tmp.setColJavaDesc(tmp.getColDBDesc());
+                tmp.setColJavaType(DBJavaTypeConvertUtil.getJavaTypeFromDBType(tmp.getColDBType()));
+                if(all.containsKey(tmpTableName)){
+                    tmpAll = all.get(tmpTableName);
+                    if(tmpAll == null){
+                        tmpAll = new ArrayList<ColumnEntity>();
+                        all.put(tmpTableName,tmpAll);
+                    }
+                }else{
+                    tmpAll = new ArrayList<ColumnEntity>();
+                    all.put(tmpTableName,tmpAll);
+                }
+                tmpAll.add(tmp);
+            }
+        }catch(Exception e){
+            throw e;
+        }finally{
+            try{
+                pstmt.close();
+                conn.close();
+            }catch(Exception e){
+                throw e;
+            }
+        }
+        return all;
+    }
 
 }

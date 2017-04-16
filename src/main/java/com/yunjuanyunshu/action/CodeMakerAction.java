@@ -9,14 +9,15 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJavaFile;
-import com.yunjuanyunshu.Entity.ClassEntry;
 import com.yunjuanyunshu.CodeMakerSettings;
 import com.yunjuanyunshu.CodeTemplate;
 import com.yunjuanyunshu.util.CodeMakerUtil;
 import com.yunjuanyunshu.util.VelocityUtil;
 import org.apache.commons.lang.time.DateFormatUtils;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author hansong.xhs
@@ -45,22 +46,22 @@ public class CodeMakerAction extends AnAction {
             return;
         }
         PsiClass currentClass = classes[0];
-        List<PsiClass> selectClasses = new ArrayList<>();
-        selectClasses.add(currentClass);
+        //List<PsiClass> selectClasses = new ArrayList<>();
+        //selectClasses.add(currentClass);
         CodeTemplate codeTemplate = settings.getCodeTemplate(templateKey);
         //select the other class by classChooser
-        for (int i = 1; i < codeTemplate.getClassNumber(); i++) {
-            PsiClass psiClass = CodeMakerUtil.chooseClass(project, currentClass);
-            if (psiClass == null) {
-                return;
-            }
-            selectClasses.add(psiClass);
-        }
+//        for (int i = 1; i < codeTemplate.getClassNumber(); i++) {
+//            PsiClass psiClass = CodeMakerUtil.chooseClass(project, currentClass);
+//            if (psiClass == null) {
+//                return;
+//            }
+//            selectClasses.add(psiClass);
+//        }
 
         Map<String, Object> map = new HashMap<>();
-        for (int i = 0; i < selectClasses.size(); i++) {
-            map.put("class" + i, ClassEntry.create(selectClasses.get(i)));
-        }
+//        for (int i = 0; i < selectClasses.size(); i++) {
+//            map.put("class" + i, ClassEntry.create(selectClasses.get(i)));
+//        }
         try {
             Date now = new Date();
             map.put("YEAR", DateFormatUtils.format(now, "yyyy"));

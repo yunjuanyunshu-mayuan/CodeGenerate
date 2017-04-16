@@ -42,7 +42,8 @@ public class DBConn extends JFrame implements ConvertBridge.Operator {
         this.file = file;
         this.project = project;
         setContentPane(mainPanel);
-        setTitle("MySQlConnext");
+        setTitle("代码生成-数据库连接");
+        setLocationRelativeTo(null);
         getRootPane().setDefaultButton(connectButton);
         this.setAlwaysOnTop(true);
         initGeneratePanel();

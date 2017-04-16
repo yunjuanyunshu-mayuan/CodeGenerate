@@ -55,7 +55,7 @@ public class CodeMakerConfiguration {
         Map<String, CodeTemplate> map = new HashMap<>();
         editPaneMap.forEach((key, value) -> {
             CodeTemplate codeTemplate = new CodeTemplate(value.getTemplateName(), value
-                .getClassName(), value.getTemplate(), value.getClassNumber());
+                .getClassName(), value.getTemplate(), value.getPackageName());
             map.put(codeTemplate.getName(), codeTemplate);
         });
         return map;

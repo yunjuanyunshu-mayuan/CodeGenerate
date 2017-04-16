@@ -10,6 +10,7 @@ package com.yunjuanyunshu.ui;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.yunjuanyunshu.CodeMakerSettings;
 import com.yunjuanyunshu.CodeTemplate;
 import com.yunjuanyunshu.Entity.ColumnEntity;
@@ -50,6 +51,7 @@ public class GridMain extends JFrame implements ConvertBridge.Operator {
     private JScrollPane listClassPane;
     private Project project;
     private JFrame father;
+    private GridMain thisObj;
 
     private HashMap<String,TableEntity> tableMap;
     private ComboBoxTableModel tableModel;
@@ -69,8 +71,9 @@ public class GridMain extends JFrame implements ConvertBridge.Operator {
         setContentPane(mainPanel);
         this.father = father;
         this.project = project;
+        this.thisObj = this;
         settings = ServiceManager.getService(CodeMakerSettings.class);
-        setTitle("MySQlConnext");
+        setTitle("代码生成工具  v1.0");
         getRootPane().setDefaultButton(okButton);
         this.setAlwaysOnTop(true);
         JComboBox comboBox = new JComboBox(ComboBoxTableModel.getValidStates());
@@ -111,6 +114,15 @@ public class GridMain extends JFrame implements ConvertBridge.Operator {
         setSize(800, 600);
         setLocationRelativeTo(null);
         setVisible(true);
+        PackageText.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(e.getClickCount() == 2){
+                    PackageSelect packageSelect = new PackageSelect(thisObj,CodeMakerUtil.generateClassRootPath(project));
+                }
+            }
+        });
     }
     private void initActionListener(){
         cancelButton.addActionListener(new ActionListener() {
@@ -154,23 +166,28 @@ public class GridMain extends JFrame implements ConvertBridge.Operator {
 
     private void onOK(ActionEvent anActionEvent) {
         CodeMakerSettings settings = ServiceManager.getService(CodeMakerSettings.class);
-        CodeTemplate codeTemplate = settings.getCodeTemplate("Converter");
-        Map<String, Object> map = TemplateKeyUtil.getTemplateKeyMap(getEntityFromTableData());
-        String contentStr = VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
-//        String content = "package cn.edu.zjvtit.empdemo;\n" +
-//                "public class abc {\n" +
-//                "String a;\n" +
-//                "}";
-        // async write action
-        ApplicationManager.getApplication().runWriteAction(
-                new CreateFileAction(CodeMakerUtil.generateClassPath(project,
-                        PackageText.getText(), classNameText.getText()), contentStr, project));
-
-
-
+        List<String> tmpSelectedList = getSelectedTemplate();
+        for(String tmp : tmpSelectedList){
+            CodeTemplate codeTemplate = settings.getCodeTemplate(tmp);
+            //codeTemplate.ge
+            Map<String, Object> map = TemplateKeyUtil.getTemplateKeyMap(getEntityFromTableData());
+            String contentStr = VelocityUtil.evaluate(codeTemplate.getCodeTemplate(), map);
+            String tmpClassName = StringUtil.isNotEmpty(codeTemplate.getClassNameVm()) ? codeTemplate.getClassNameVm() : classNameText.getText();
+            String tmpPackageName = StringUtil.isNotEmpty(codeTemplate.getPackageName()) ? PackageText.getText()+"."+codeTemplate.getPackageName() : PackageText.getText();
+            String tmpFilePath = CodeMakerUtil.generateClassPath(project,tmpPackageName, tmpClassName);
+            tmpFilePath = VelocityUtil.evaluate(tmpFilePath, map);
+            // async write action
+            ApplicationManager.getApplication().runWriteAction(
+                    new CreateFileAction(tmpFilePath, contentStr, project));
+        }
     }
 
-
+    private  List  getSelectedTemplate(){
+        if(listClassType != null){
+            return listClassType.getSelectedValuesList();
+        }
+        return  null;
+    }
 
     private void onCancel() {
         father.dispose();
@@ -267,6 +284,7 @@ public class GridMain extends JFrame implements ConvertBridge.Operator {
         TableDao tableDao = new TableDao(DBUSER,DBPASSWORD, DBURL);
         try {
             tableMap = tableDao.findHashMapAllTableInfo(schema);
+
             return tableDao.findAllTableName(schema);
         } catch (Exception e) {
             e.printStackTrace();
@@ -274,6 +292,11 @@ public class GridMain extends JFrame implements ConvertBridge.Operator {
         return null;
     }
 
+    public void setPackageText(String packageText){
+        if(packageText !=null && !packageText.equals("")){
+            PackageText.setText(packageText);
+        }
+    }
 
     private MouseInputListener getMouseInputListener(final JTable jTable) {
         return new MouseInputListener() {
