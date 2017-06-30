@@ -60,7 +60,7 @@
                                   </grid>
                                 </constraints>
                                 <properties>
-                                  <text value="password"/>
+                                  <text value="syamn"/>
                                 </properties>
                               </component>
                             </children>
@@ -98,7 +98,7 @@
                                       </grid>
                                     </constraints>
                                     <properties>
-                                      <text value="127.0.0.1:3306/student"/>
+                                      <text value="yy.yunjuanyunshu.com"/>
                                     </properties>
                                   </component>
                                 </children>
